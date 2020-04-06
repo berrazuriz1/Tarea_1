@@ -1,0 +1,19 @@
+{% extends 'Base/Base.html' %}
+{% load static %}
+
+{% block header %}
+        <h2>Lugar</h2>
+{% endblock %}
+
+{% block content %}
+        <div>
+        <p>Nombre: {{ lugar.name }}</p>
+        <p>Tipo: {{ lugar.type }}</p>
+        <p>Dimensión: {{ lugar.dimension }}</p>
+        <p>Residentes:
+            {% for character in lugar.residents %}
+                <a class="btn-link" href="{% url 'character' character.id %}">{{ character.name }}, </a>
+            {% endfor %}
+        </p>
+        </div>
+    {% endblock %}

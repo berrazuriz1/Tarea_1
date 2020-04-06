@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% extends 'Base/Base.html' %}
+{% load static %}
+
+{% block header %}
+        <h2>Personaje</h2>
+{% endblock %}
+
+{% block content %}
+        <div>
+        <img src="{{ caracter.image }}">
+        <p>Nombre: {{ caracter.name }}</p>
+        <p>Estado: {{ caracter.status }}</p>
+        <p>Especie: {{ caracter.species }}</p>
+        <p>Tipo: {{ caracter.type }}</p>
+        <p>Genero: {{ caracter.gender }}</p>
+        {% if caracter.origin.name == 'unknown' %}
+        <p>Origen: unknown</p>
+        {% else %}
+        <p>Origen: <a class="btn-link" href="{% url 'location' caracter.origin.id %}">{{ caracter.origin.name }}, </a></p>
+        {% endif %}
+        {% if caracter.location.name == 'unknown' %}
+        <p>Locación: unknown</p>
+        {% else %}
+        <p>Locación: <a class="btn-link" href="{% url 'location' caracter.location.id %}">{{ caracter.location.name }}, </a></p>
+        {% endif %}
+        <p>Episodios:
+            {% for episodio in caracter.episode %}
+                <a class="btn-link" href="{% url 'episode' episodio.id %}">{{ episodio.name }}, </a>
+            {% endfor %}
+        </p>
+        </div>
+    {% endblock %}
+</body>
+</html>

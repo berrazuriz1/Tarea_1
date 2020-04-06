@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/button.css' %}">
+    <title>{% block title %} Tarea 1{% endblock %}</title>
+</head>
+<body>
+    <h1>Rick and Morty Información</h1>
+    <form action="{% url 'search' %}" method="get">
+        <input type="text" name="term" placeholder="Search..">
+    </form>
+    {% block header %}
+        <h2></h2>
+    {% endblock %}
+    {% block content %}
+        <div></div>
+    {% endblock %}
+</body>
+</html>

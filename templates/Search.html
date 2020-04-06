@@ -1,0 +1,42 @@
+{% extends 'Base/Base.html' %}
+{% load static %}
+
+{% block header %}
+        <h2>Resultados Busqueda "{{ term }}"</h2>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h3>Episodios</h3>
+        {% if episodios %}
+                <p> {% for episodio in episodios %}
+                    <a class="btn-link" href="{% url 'episode' episodio.id %}">{{ episodio.name }}, </a>
+                {% endfor %}
+                </p>
+        {% else %}
+        <p>No hay episodios que coincidan con la busqueda</p>
+        {% endif %}
+    </div>
+    <div>
+        <h3>Lugares</h3>
+        {% if lugares %}
+                <p>{% for lugar in lugares %}
+                    <a class="btn-link" href="{% url 'location' lugar.id %}">{{ lugar.name }}, </a>
+                {% endfor %}
+                </p>
+        {% else %}
+        <p>No hay lugares que coincidan con la busqueda</p>
+        {% endif %}
+    </div>
+    <div>
+        <h3>Personajes</h3>
+        {% if caracteres %}
+                <p>{% for caracter in caracteres %}
+                    <a class="btn-link" href="{% url 'character' caracter.id %}">{{ caracter.name }}, </a>
+                {% endfor %}
+                </p>
+        {% else %}
+        <p>No hay personajes que coincidan con la busqueda</p>
+        {% endif %}
+    </div>
+    {% endblock %}
