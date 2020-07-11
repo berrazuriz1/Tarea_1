@@ -33,6 +33,7 @@ Pygments==2.6.1
 pyrsistent==0.16.0
 python-dateutil==2.8.1
 pytz==2020.1
+pywin32==227
 pywinpty==0.5.7
 pyzmq==19.0.0
 Send2Trash==1.5.0
@@ -45,3 +46,4 @@ traitlets==4.3.3
 wcwidth==0.1.9
 webencodings==0.5.1
 whitenoise==5.1.0
+python-graphql-client==0.3.0
