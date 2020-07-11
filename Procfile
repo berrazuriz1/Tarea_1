@@ -1,1 +1,1 @@
-web: gunicorn Tarea1.wsgi
+web: gunicorn Tarea_1.wsgi
