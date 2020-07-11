@@ -10,7 +10,7 @@
         <h3>Episodios</h3>
         {% if episodios %}
                 <p> {% for episodio in episodios %}
-                    <a class="btn-link" href="{% url 'episode' episodio.id %}">{{ episodio.name }}, </a>
+                    <a class="btn-link" href="{% url 'episode' episodio.episode %}">{{ episodio.name }}, </a>
                 {% endfor %}
                 </p>
         {% else %}

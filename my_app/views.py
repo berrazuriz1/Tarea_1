@@ -1,72 +1,189 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from python_graphql_client import GraphqlClient
 import requests
 
+client = GraphqlClient(endpoint="https://integracion-rick-morty-api.herokuapp.com/graphql")
 # Requests for APi rick and Morty
 
 def episodes(term):
-    episodesMatch = requests.get('https://rickandmortyapi.com/api/episode/?name=' + term).json()
-    if('error' in episodesMatch):
+    query = """
+                query episodeQuery($name: String) {
+                  episodes(filter: {name: $name}) {
+                    info {
+                      count
+                    }
+                    results {
+                      name
+                      episode
+                    }
+                  }
+                }
+            """
+    variables = {"name": term}
+    # Synchronous request
+    data = client.execute(query=query, variables=variables)
+    if('errors' in data.keys()):
         episodes = None
     else:
-        episodes = episodesMatch['results']
+        episodes = data['data']['episodes']['results']
     return episodes
 
 def lugares(term):
-    locationsMatch = requests.get('https://rickandmortyapi.com/api/location/?name=' + term).json()
-    if('error' in locationsMatch):
+    query = """
+                    query episodeQuery($name: String) {
+                      locations(filter: {name: $name}) {
+                        info {
+                          count
+                        }
+                        results {
+                          name
+                          id
+                        }
+                      }
+                    }
+                """
+    variables = {"name": term}
+    # Synchronous request
+    data = client.execute(query=query, variables=variables)
+    if('errors' in data.keys()):
         lugares = None
     else:
-        lugares = locationsMatch['results']
+        lugares = data['data']['locations']['results']
     return lugares
 
 def caracteres(term):
-    charactersMatch = requests.get('https://rickandmortyapi.com/api/character/?name=' + term).json()
-    if('error' in charactersMatch):
+    query = """
+                        query episodeQuery($name: String) {
+                          characters(filter: {name: $name}) {
+                            info {
+                              count
+                            }
+                            results {
+                              name
+                              id
+                            }
+                          }
+                        }
+                    """
+    variables = {"name": term}
+    # Synchronous request
+    data = client.execute(query=query, variables=variables)
+    if('errors' in data.keys()):
         caracteres = None
     else:
-        caracteres = charactersMatch['results']
+        caracteres = data['data']['characters']['results']
     return caracteres
 
 # Create your views here.
 
 def home(request):
-    r = requests.get("https://rickandmortyapi.com/api/episode").json()
-    episodios = r['results']
-    for page in range(1,r['info']['pages']+1):
-        episodios += (requests.get(r['info']['next']).json()['results'])
-    contexto = {'episodios': episodios, 'tipo': 'episodios'}
-    return render(request, 'Episodios.html', contexto)
+    query = """
+        query {
+          episodes {
+            info {
+              count
+            }
+            results {
+              name
+              id
+              air_date
+              episode
+            }
+          }
+        }
+    """
 
-def episode_view(request, id_episodio):
-    r = requests.get("https://rickandmortyapi.com/api/episode/" + str(id_episodio)).json()
-    characters = []
-    for characther in r["characters"]:
-        characters.append(requests.get(characther).json())
-    r['characters'] = characters
-    contexto = {'episodio': r}
+    # Synchronous request
+    data = client.execute(query=query)
+    episodes = data['data']['episodes']['results']
+    contexto = {'episodios': episodes}
+    return render(request, "Episodios.html", contexto)
+
+def episode_view(request, code):
+    print(code)
+    query = """
+            query episodeQuery($episode: String) {
+              episodes(filter: {episode: $episode}) {
+                info {
+                  count
+                }
+                results {
+                  name
+                  id
+                  air_date
+                  episode
+                  characters {
+                    name
+                    id
+                  }
+                }
+              }
+            }
+        """
+    variables = {"episode": code}
+    # Synchronous request
+    data = client.execute(query=query, variables=variables)
+    print(data['data']['episodes']['results'])
+    contexto = {'episodio': data['data']['episodes']['results'][0]}
     return render(request, "UnEpisodio.html", contexto)
 
 def character_view(request, id_character):
-    r = requests.get("https://rickandmortyapi.com/api/character/" + str(id_character)).json()
-    episodes= []
-    for episode in r["episode"]:
-        episodes.append(requests.get(episode).json())
-    r['episode'] = episodes
-    if (not r['origin']['name'] == 'unknown'):
-        r['origin'] = requests.get(r['location']['url']).json()
-    if (not r['location']['name'] == 'unknown'):
-        r['location'] = requests.get(r['location']['url']).json()
-    contexto = {'caracter': r}
+    query = """
+                query characterQuery($id: ID!) {
+                  character(id: $id) {
+                    id
+                    name
+                    image
+                    status
+                    species
+                    type
+                    gender
+                    location {
+                      name
+                      id
+                    }
+                    origin {
+                      id
+                      name
+                      residents {
+                        id
+                        name
+                      }
+                    } 
+                    episode {
+                      name
+                      episode
+                    }
+                  }
+                }
+            """
+    variables = {"id": id_character}
+    # Synchronous request
+    data = client.execute(query=query, variables=variables)
+    print(data)
+    contexto = {'caracter': data['data']['character']}
     return render(request, "UnCaracter.html", contexto)
 
 def location_view(request, id_lugar):
-    r = requests.get("https://rickandmortyapi.com/api/location/" + str(id_lugar)).json()
-    characters = []
-    for characther in r["residents"]:
-        characters.append(requests.get(characther).json())
-    r['residents'] = characters
-    contexto = {'lugar': r}
+    query = """
+                    query characterQuery($id: ID!) {
+                      location(id: $id) {
+                        name
+                        id
+                        dimension
+                        residents {
+                          name
+                          id
+                        }
+                        type
+                      }
+                    }
+                """
+    variables = {"id": id_lugar}
+    # Synchronous request
+    data = client.execute(query=query, variables=variables)
+    print(data)
+    contexto = {'lugar': data['data']['location']}
     return render(request, "UnLugar.html", contexto)
 
 def searchBar(request):

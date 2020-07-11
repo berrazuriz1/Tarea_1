@@ -12,7 +12,9 @@
         <p>Dimensión: {{ lugar.dimension }}</p>
         <p>Residentes:
             {% for character in lugar.residents %}
-                <a class="btn-link" href="{% url 'character' character.id %}">{{ character.name }}, </a>
+                {% if character.name %}
+                    <a class="btn-link" href="{% url 'character' character.id %}">{{ character.name }}, </a>
+                {% endif %}
             {% endfor %}
         </p>
         </div>

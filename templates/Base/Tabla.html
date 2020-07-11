@@ -38,10 +38,10 @@
                             {% for episodio in episodios %}
                                 <tr class="row100">
                                     <td class="column100 column1" data-column="column1">
-                                        <a class="btn-default" href="{% url 'episode' episodio.id %}">{{ episodio.name }}</a>
+                                        <a class="btn-default" href="{% url 'episode' episodio.episode %}">{{ episodio.name }}</a>
                                     </td>
                                     <td class="column100 column2" data-column="column2">{{ episodio.air_date }}</td>
-                                    <td class="column100 column3" data-column="column3">{{ episodio.id }}</td>
+                                    <td class="column100 column3" data-column="column3">{{ episodio.episode }}</td>
                                 </tr>
                             {% endfor %}
 						</tbody>

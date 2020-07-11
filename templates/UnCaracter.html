@@ -32,7 +32,7 @@
         {% endif %}
         <p>Episodios:
             {% for episodio in caracter.episode %}
-                <a class="btn-link" href="{% url 'episode' episodio.id %}">{{ episodio.name }}, </a>
+                <a class="btn-link" href="{% url 'episode' episodio.episode %}">{{ episodio.name }}, </a>
             {% endfor %}
         </p>
         </div>

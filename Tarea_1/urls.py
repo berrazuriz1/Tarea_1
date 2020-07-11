@@ -21,7 +21,7 @@ from my_app.views import home, episode_view, character_view, location_view, sear
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home),
-    path('episodio/<int:id_episodio>', episode_view, name='episode'),
+    path('episodio/<str:code>', episode_view, name='episode'),
     path('caracter/<int:id_character>', character_view, name='character'),
     path('lugar/<int:id_lugar>', location_view, name='location'),
     path('search/', searchBar, name='search')
